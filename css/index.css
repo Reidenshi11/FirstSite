@@ -1,0 +1,139 @@
+body{
+    margin: 0;
+    font-family: sans-serif, Arial;
+    font-size: 15px;
+    line-height: 1,5;
+    color: #0f0f0f;
+    background: 
+    linear-gradient(to bottom,rgba(13, 6, 71, 0.932) 40%, rgba(194, 25, 81));
+
+    /* border: solid rgb(11, 7, 231) 4px; */
+}
+
+/*.page{
+    
+    width: auto;
+    margin: 20px auto;
+}
+/* Header */
+
+.header{
+    margin: 1px 1px;
+    padding: 10px 0px;
+    background-image: url(../files/fon_title.jpg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    /* background-size: contain; */
+    width: 100%;
+    height: auto;
+    /* border: solid green 2px;     */
+}
+
+.header-title{
+    margin: 0;
+    
+    font-size: 24px;
+    color: rgb(250, 250, 250);
+    text-align: center;
+    /* border: solid green 2px; */
+    /*font-size: 3vw;*/
+    
+}
+
+.header-subtitle{
+    margin: 0;
+    
+    font-size: 16px;
+    color: rgba(26, 67, 209, 0.81);
+    text-align: center;
+    font-weight: 400;
+    /* border: solid green 2px; */
+    /*font-size: 2vw;*/
+}
+
+/* Nav */
+
+.nav{
+    text-align: center;
+    /* border: solid green 2px; */
+}
+
+.nav-link{
+   display: inline-block;
+    padding: 8px 12px;
+    color: rgb(184, 179, 179);
+    text-decoration: none;
+    /* border: solid green 2px; */
+}
+.nav-link:hover{
+    /*background: linear-gradient(70deg,rgb(27, 42, 179), rgb(226, 32, 210));*/
+    background: radial-gradient(rgb(109, 49, 69) 20%, rgb(6, 2, 41) 80%);
+    font-size: 110%;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.nav-link-secret {
+    display: inline-block;
+    font-size: 2px;
+    padding: 8px 12px;
+    color: rgb(12, 12, 0);
+    text-decoration: none;  
+    /* border: solid green 2px; */
+
+}
+.nav-link-secret:hover {
+    text-decoration: underline;  
+    cursor: auto;
+}
+.nav-link-secret:active {
+   color: mediumvioletred;
+   
+}
+
+/* Img */
+.image{
+    text-align: center;
+    margin: 10px auto 10px;
+    display: block;
+    overflow: auto;
+    max-width: 100%;
+    max-height: auto;
+    /* width: 240vw;
+    height: auto; */
+    /* border: solid green 2px; */
+
+   
+}
+
+.content {
+    color: white;
+}
+.content-text {
+    color: rgb(188, 193, 214);
+}
+
+.read-more {
+  color:  rgb(226, 209, 209);  
+}
+.audio{
+    display: block;
+    text-align: center;
+    margin: 20px 10px 10px 10px;
+    /* border: solid green 2px; */
+}
+.video{
+    text-align: center;
+    max-width: 100%;
+    overflow: auto;
+    margin: 0px auto;
+    /* width: 480px;
+    height: auto; */
+    width: max-content;
+    /* max-width: 100%;
+    max-height: auto;
+    width: auto;
+    height: auto; */
+    /* border: solid green 2px; */
+}
