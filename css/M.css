@@ -35,8 +35,8 @@ body{
     display: block;
     max-width: 640px;
     max-height: auto;
-    width: 240vw;
-    height: auto;
+    width: auto;
+    height: 360px;
     
 }
 
