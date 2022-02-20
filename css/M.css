@@ -31,6 +31,7 @@ body{
     font-weight: 400;
 }
 .img{
+    text-align: center;
     margin: 10px auto 10px;
     display: block;
     max-width: 100%;
