@@ -99,12 +99,7 @@ body{
     display: block;
     overflow: auto;
     max-width: 100%;
-    height: auto;
-    /* width: 240vw;
-    height: auto; */
-    /* border: solid green 2px; */
-
-   
+    height: auto;  
 }
 
 .content {
