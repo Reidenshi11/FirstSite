@@ -64,6 +64,7 @@ body{
     padding: 8px 12px;
     color: rgb(184, 179, 179);
     text-decoration: none;
+    /* position: relative; */
     /* border: solid green 2px; */
 }
 .nav-link:hover{
@@ -91,6 +92,14 @@ body{
    color: mediumvioletred;
    
 }
+/* 
+.snake {
+    /* background-image: url(../img/snake.svg);
+    width: 5px;
+    height: 2px; */
+    /* position: relative;
+    display: ; */
+ 
 
 /* Img */
 .image{
