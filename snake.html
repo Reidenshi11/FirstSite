@@ -22,14 +22,16 @@
         }
 
         .score {
+            color: white;
             height: 30px;
             width: 70px;
             border: 1px white solid;
             display: flex;
             margin: 40px 0px;
-            background: white;
+            background: black;
             align-items: center;
             justify-content: center;
+            border: 1px solid white;
         }
 
         .BackToIndex_text {
@@ -153,7 +155,8 @@
           // Помним, что размер холста у нас 400x400, при этом он разбит на ячейки — 25 в каждую сторону
           apple.x = getRandomInt(0, 25) * grid;
           apple.y = getRandomInt(0, 25) * grid;
-          console.log(snake.maxCells)
+          console.log(snake.maxCells);
+          document.querySelector('.score').textContent = snake.maxCells;
         }
         // Проверяем, не столкнулась ли змея сама с собой
         // Для этого перебираем весь массив и смотрим, есть ли у нас в массиве змейки две клетки с одинаковыми координатами 
