@@ -1,0 +1,125 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    background: #000;
+}
+
+.game {
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* flex-direction: column; */
+    border: 1px solid #fff;
+}
+
+.border {
+    border: 1px solid #fff;
+    display: flex;
+    justify-content: center;
+    padding: 10px 0px;
+}
+
+.score {
+    background: #000;
+    min-width: 40px;
+    width: auto;
+    height: 20px;
+    display: inline-block;
+    text-align: center;
+    margin-bottom: 25px;
+    color: #fff;
+    border: 1px solid white;
+    margin: 0 5px;
+}
+
+.current-user {
+    background: #000;
+    min-width: 40px;
+    width: auto;
+    height: 20px;
+    display: inline-block;
+    text-align: center;
+    margin-bottom: 25px;
+    color: #fff;
+    border: 1px solid white;
+    margin: 0 5px;
+}
+
+.record-user {
+    background: #000;
+    min-width: 40px;
+    width: auto;
+    height: 20px;
+    display: inline-block;
+    text-align: center;
+    margin-bottom: 25px;
+    color: #fff;
+    border: 1px solid white;
+    margin: 0 5px;
+}
+
+.clock {
+    background: #000;
+    min-width: 60px;
+    width: auto;
+    height: 20px;
+    display: inline-block;
+    text-align: center;
+    margin-bottom: 25px;
+    color: #fff;
+    border: 1px solid white;
+    margin: 0 5px;
+}
+
+.highscore {
+    background: #000;
+    min-width: 40px;
+    width: auto;
+    height: 20px;
+    display: inline-block;
+    text-align: center;
+    margin-bottom: 25px;
+    color: #fff;
+    border: 1px solid white;
+    margin: 0 5px;
+}
+
+
+
+.text {
+    color: #fff;
+    font-size: 14px;
+    top: 5px;
+}
+
+canvas {
+    border: 1px solid #fff;
+}
+
+.leadertable {
+    display: inline-block;
+    color: #fff;
+    min-width: 40px;
+    width: 100%;
+    min-height: 400px;
+    height: auto;
+    border: 1px solid red;
+    text-align: center;
+}
+
+.controls {
+    display: inline-block;
+    color: #fff;
+    min-width: 40px;
+    width: 100%;
+    min-height: 400px;
+    height: auto;
+    border: 1px solid red;
+    text-align: center;
+}
+
+

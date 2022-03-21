@@ -1,0 +1,340 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>mySnack</title>
+    <style>
+        #canvas{border: 1px  #000000 solid;
+            background: #9DE5F4;
+            display: inline;
+            margin-top: 80px;
+            margin-left:50px;
+            float:left;
+        }
+    </style>
+
+</head>
+
+<body>
+<! - Нарисуйте прямоугольник длиной 450 и шириной 450->
+<canvas id="canvas" width="450" height="450" ></canvas>
+
+<div id="message" style="border:1px solid black;width: 300px;height: 450px;margin-top: 80px;margin-right:100px;float:right">
+    <button id="pause">пауза</button> &nbsp;&nbsp;
+    <button  onclick="javascript:location.reload();" type="button">Начать сначала</button>
+    <div></div><br/>
+    <div>Текущие игроки:<span id="name"></span></div><br/>
+    <div>оценка:<span id="score">0</span></div><br/>
+    <div><button id="historyScore_button" onclick="displayHistory()">Историческая запись</button>
+        <ul id="historyScore">
+        </ul>
+    </div>
+    <div><button id="ranking_button" onclick="displayRanking()">  Leaderboard</button>
+        <ul id="ranking">
+        </ul>
+    </div>
+    <div>
+        <button id="clearStorage" onclick="clearStorage()">Очистить запись</button>
+    </div>
+</div>
+</body>
+
+<script type="text/javascript">
+    var canva = document.getElementById("canvas");
+    var ctx   = canva.getContext("2d");// Он задает двухмерное рисование и заставляет этот метод возвращать объект среды, который экспортирует API двумерного рисования
+    var snakes = [];// определить змею
+    var foodX = 0;       // Пищевые координаты оси X
+    var foodY = 0;       // Координаты оси Y еды
+    var snakecount = 6;
+    var size = 15;  // Длина сетки
+    var interval = null;   // Таймер
+    var toGo = 3;           // Направление движения
+    var currentscore=0;// текущий счет
+    var flag=false;// false означает, что текущий пользователь - новый пользователь, true - старый пользователь
+    var currentName;// Текущий пользователь
+    var isPause=false;
+    window.onload = function(){
+        initMes();
+        start();
+        interval = setInterval(move,100);// Интервал
+        document.onkeydown = function(event){
+            var event = event || window.event;
+            keydown(event.keyCode);
+        }
+    };
+    function clearStorage() {
+        localStorage.clear();
+        alert("Запись очищена");
+    }
+    function displayRanking() {
+        var historyMessage=JSON.parse(localStorage.getItem("messageStorage"));// Информация истории пользователя
+        var ranking=new Array();
+        for(var i=0;i<historyMessage.length;i++) {
+            var player=historyMessage[i];
+            var name_highScore={};
+            var currentScore=player.score;// Текущий массив очков истории игрока
+            var currentHighScore=currentScore[0];// Текущий рейтинг игрока
+            for(var j=0;j<currentScore.length;j++){
+                if(currentHighScore<currentScore[j])
+                {
+                    currentHighScore=currentScore[j];
+                }
+            }
+            name_highScore.name=player.name;
+            name_highScore.score=currentHighScore;
+            ranking.push(name_highScore); // Поместить игрока и объект с наибольшим количеством очков в массив
+        }
+
+        // Сортировка массива по счету
+        var k, m, tmp;
+        for (k = 1; k < ranking.length; k++)
+        {
+            tmp = ranking[k];
+            m = k - 1;
+            while (m>=0 && tmp.score < ranking[m].score)
+            {
+                ranking[m + 1] = ranking[m];
+                m--;
+            }
+            ranking[m + 1] = tmp;
+        }
+//        console.log(ranking);
+        // Создать узел
+        for(var f=ranking.length-1;f>=0;f--){
+            var ul=document.getElementById('ranking');
+            var li=document.createElement('li');
+            li.innerHTML="Игрок:"+ranking[f].name+"------ Самый высокий балл:"+ranking[f].score;
+            ul.appendChild(li);
+        }
+
+    }
+    function displayHistory() {
+        var historyMessage=JSON.parse(localStorage.getItem("messageStorage"));// Информация истории пользователя
+// console.log ("History-》" + historyMessage);
+//        console.log(historyMessage.length);
+        var ul=document.getElementById('historyScore');
+        for(var i=0;i<historyMessage.length;i++) {
+            console.log(historyMessage[i].name);
+            if(historyMessage[i].name==currentName){
+                var score=historyMessage[i].score;
+                for(var j=1;j<score.length;j++){
+                    var li=document.createElement('li');
+                    li.innerHTML="Первый"+j+'Times:+score[j]';
+                    ul.appendChild(li);
+                }
+                return;
+            }
+        }
+    }
+    // Игра начинается, инициализируем информацию о пользователе
+    function initMes(){
+        var message_child={};
+        var historyMessage=JSON.parse(localStorage.getItem("messageStorage"));// Информация истории пользователя
+// console.log ("Initialization-》" + historyMessage);
+        currentName=prompt('Пожалуйста, введите ваше имя:','');
+        if(currentName!=null && currentName!=''){
+            document.getElementById('name').innerHTML=currentName;
+        }
+        if(historyMessage != null){
+            for(var i=0;i<historyMessage.length;i++){
+                if(historyMessage[i].name===currentName){
+                    flag=true; // Пользователь уже существует
+// console.log ("Старый пользователь");
+                }
+            }
+        }
+        if(!flag){// Новый пользователь
+            console.log("Новый пользователь");
+            message_child.name=currentName;
+            message_child.score=[0];
+            if(historyMessage==null){
+                historyMessage=new Array();// Не только новые пользователи, но и игра не имеет истории
+// console.log («Новый пользователь и игра не имеет истории»);
+            }
+            historyMessage.push(message_child);// Поместить информационный объект нового пользователя в массив
+            localStorage.setItem("messageStorage",JSON.stringify(historyMessage));// Сохранить в локальном
+
+// console.log ("Присоединение новых пользователей-" "+ JSON.parse (localStorage.getItem (" messageStorage ")));
+        }
+    }
+    // Игра окончена, обновите информацию о пользователе
+    function updataMes() {
+        var historyMessage=JSON.parse(localStorage.getItem("messageStorage"));// Информация истории пользователя
+        console.log("Игра окончена ..."+historyMessage);
+//        console.log(historyMessage.length);
+
+        for(var i=0;i<historyMessage.length;i++){
+            if(historyMessage[i].name==currentName){
+                historyMessage[i].score.push(currentscore);
+                localStorage.setItem("messageStorage",JSON.stringify(historyMessage));// Сохранить в локальном
+//                console.log(JSON.parse(localStorage.getItem("messageStorage"))[i].score);
+                return;
+            }
+        }
+    }
+    // Создать холст
+    function map(){
+        ctx.clearRect(0,0,450,450);// (x, y, width, height), очистить указанный прямоугольник (координаты и пиксели) в данном прямоугольнике
+        // Рисуем ось X
+        for(var x=0;x<=30;x++){
+            ctx.moveTo(size*x,0); // Начальная позиция
+            ctx.lineTo(x * size, 450);// Конечная позиция
+            ctx.strokeStyle  = "#000000";// Цвет границы
+            ctx.stroke();
+        }
+        // Рисуем ось y
+        for(var y=0;y<=30;y++){
+            ctx.moveTo(0,size*y); // Начальная позиция
+            ctx.lineTo(450,y * size);// Конечная позиция
+            ctx.strokeStyle  = "#000000";// Цвет границы
+            ctx.stroke();
+        }
+        // Создать змею
+        for (var i = 0; i < snakes.length; i++){
+            if(snakes[i] == snakes[snakes.length-1]){
+                ctx.beginPath();
+                ctx.fillStyle = "red";
+                ctx.fillRect(snakes[i].x, snakes[i].y, size, size);
+                ctx.moveTo(snakes[i].x, snakes[i].y);
+                ctx.lineTo(snakes[i].x + size, snakes[i].y);
+                ctx.lineTo(snakes[i].x + size, snakes[i].y + size);
+                ctx.lineTo(snakes[i].x, snakes[i].y + size);
+                ctx.closePath();
+                ctx.strokeStyle = "white";
+                ctx.stroke();
+            }else{
+                ctx.beginPath();
+                ctx.fillStyle = "green";
+                ctx.fillRect(snakes[i].x, snakes[i].y, size, size);
+                ctx.moveTo(snakes[i].x, snakes[i].y);
+                ctx.lineTo(snakes[i].x + size, snakes[i].y);
+                ctx.lineTo(snakes[i].x + size, snakes[i].y + size);
+                ctx.lineTo(snakes[i].x, snakes[i].y + size);
+                ctx.closePath();
+                ctx.strokeStyle = "white";
+                ctx.stroke();
+
+            }
+        }
+
+        // Рисуем еду
+        ctx.beginPath();
+        ctx.fillStyle = "yellow";
+        ctx.fillRect(foodX, foodY, size, size);
+        ctx.moveTo(foodX, foodY);
+        ctx.lineTo(foodX + size, foodY);
+        ctx.lineTo(foodX + size, foodY + size);
+        ctx.lineTo(foodX, foodY + size);
+        ctx.closePath();
+        ctx.strokeStyle = "red";
+        ctx.stroke();
+
+    }
+    // Инициализация
+    function start(){
+        // определить змею
+        for(var i=0;i<snakecount;i++){
+            snakes[i]={x:i*size,y:0};
+        }
+        map();
+        addFood();
+
+    }
+
+    // случайно генерируем еду
+    function addFood(){
+        foodX = Math.floor(Math.random() * (30 - 1)) * size;
+        foodY = Math.floor(Math.random() * (30 - 1)) * size;
+    }
+
+    // Добавить тело змеи
+    function addSnake(){
+        snakecount++;
+        snakes.unshift({x:size * 30, y:size * 30});
+    }
+
+    // Просто ешь еду
+    function isEat(){
+        if (snakes[snakecount - 1].x == foodX && snakes[snakecount - 1].y == foodY) {
+            currentscore++;
+            document.getElementById("score").innerHTML=currentscore;
+            addFood();
+            addSnake();
+        }
+    }
+
+    // Функция движения
+    function move(){
+        switch(toGo){
+            case 1: // слева
+                snakes.push({x: snakes[snakecount - 1].x - size, y: snakes[snakecount - 1].y});
+                break;
+            case 2: // выше
+                snakes.push({x: snakes[snakecount - 1].x, y: snakes[snakecount - 1].y - size});
+                break;
+            case 3: // правый
+                snakes.push({x: snakes[snakecount - 1].x + size, y: snakes[snakecount - 1].y});
+                break;
+            case 4: // ниже
+                snakes.push({x: snakes[snakecount - 1].x, y: snakes[snakecount - 1].y + size});
+// случай 5: // ниже
+//              snakes.push({x: snakes[snakecount - 1].x+ size, y: snakes[snakecount - 1].y + size});
+//
+                break;
+            default:;
+        }
+        snakes.shift();
+        isEat();
+        isDie();
+        map();
+    }
+
+    // Интерактивная функция ответа
+    function keydown(keyCode){
+//        console.log(keyCode);
+        console.log(isPause);
+        switch(keyCode){
+            case 37: // слева
+                if(toGo != 1 && toGo != 3)  toGo = 1;break;
+            case 38: // выше
+                if(toGo != 2 && toGo != 4)  toGo = 2;break;
+            case 39: // правый
+                if(toGo != 3 && toGo != 1)  toGo = 3;break;
+            case 40: // Далее
+                if(toGo != 4 && toGo != 2)  toGo = 4;break;
+// случай 65: // правый наклонный
+//                   toGo = 5;break;
+
+            case 80: // Пуск / Пауза
+                if(isPause){
+                    interval = setInterval(move,100);
+                    isPause = false;
+                    document.getElementById('pause').innerHTML = "Pause";
+                }else{
+                    clearInterval(interval);
+                    isPause = true;
+                    document.getElementById('pause').innerHTML = "Start";
+                }
+                break;
+        }
+    }
+
+    // Смертный приговор
+    function isDie(){
+        if(snakes[snakecount - 1].x == -15 || snakes[snakecount - 1].x == size * 30
+            || snakes[snakecount - 1].y == -15 || snakes[snakecount - 1].y == size * 30){
+            updataMes();
+            clearInterval(interval);
+            alert("Game Over!");
+        }
+        for(var i = 0; i < snakecount - 1; i++){
+            if(snakes[snakecount - 1].x == snakes[i].x && snakes[snakecount - 1].y == snakes[i].y){
+                updataMes();
+                clearInterval(interval);
+                alert("Game Over!");
+            }
+        }
+    }
+
+</script>
+</html>
